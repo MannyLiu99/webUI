@@ -29,11 +29,30 @@
 <script src="../../dist/javascripts/zepto.min.js"></script>
 <script src="../../dist/javascripts/vectors.js"></script>
 <script src="../../src/js/base/zjcx-datePicker.js"></script>
+<script src="../../src/js/util/mannyDateUtil.js"></script>
 <script>
 
     $(function () {
+
+        var dateUtil = new MannyDateUtil()
+        var now = new Date();
+        function createGather() {
+            var gather = []
+            for(let i=0; i<10; i++){
+                var tempObj = {
+                    date: dateUtil.formatDateToString(dateUtil.getCountDay(now, i)),
+                    comment: '有票',
+                    status: 'select',
+                    tag: '休',
+                    label: '端午',
+                    badge: '',
+                }
+                gather.push(tempObj)
+            }
+            return gather;
+        }
         $('.date-picker-container').datePicker({
-            dateBase: '2019-06-05',
+            dateBase: dateUtil.formatDateToString(now),
             switchMonth:function (currentDate,picker,callback) {
                 picker.drawMonth(currentDate);
                 //模拟ajax
@@ -73,51 +92,7 @@
                 },600)
 
             },
-            //特殊标记的日历
-            gather: [
-//                {
-//                    date: '2019-06-05',
-//                    comment: '有票',
-//                    status: 'select',
-//                    tag: '休',
-//                    label: '端午',
-//                    badge: '',
-//                },
-//                {
-//                    date: '2019-06-06',
-//                    comment: '/',
-//                    status: 'readOnly',
-//                    tag: '班',
-//                    label: '端午',
-//                    badge: '1',
-//                },
-                {
-                    date: '2019-06-07',
-                    comment: '$12',
-                    status: 'select',
-                    tag: '班',
-                    label: '端午',
-                    badge: '1',
-                },
-                {
-                    date: '2019-06-08',
-                    comment: '$12',
-                    status: 'select',
-                    //                tag: '班',
-                    //                label: '端午',
-                    //                badge: '1',
-                },
-                {
-                    date: '2019-06-19',
-                    //                comment: '$12',
-                    status: 'select',
-                    tag: '班',
-                    label: '端午',
-                    badge: '1',
-                    busId: '123456789',
-                    price:33
-                }
-            ],
+            gather: createGather(),
 //            before: true,
             selectCallback:function (data) {
                 console.log("结果：");
@@ -126,6 +101,9 @@
             },
             noGatherShow: true,//没有gather数据的是否显示
         });
+
+
+
     })
 </script>
 
