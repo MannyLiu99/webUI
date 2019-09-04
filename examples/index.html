@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>中交出行</title>
+    <meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="format-detection" content="email=no">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <link href="../dist/stylesheets/simpleui.min.css" rel="stylesheet" type="text/css">
+    <style>
+        .index-tabs > li {
+            margin-left: 0!important;
+            padding: 0!important;
+        }
+
+        .index-tabs > li > h4 {
+            padding: 10px 30px 10px 15px;
+            font-weight: normal;
+        }
+
+        .index-tabs > li.active > h4 {
+            background-color: #008bbf;
+            color: #fff;
+        }
+
+        .index-main, .index-main ul {
+            background-color: #fafafa;
+        }
+
+        .index-tabs ul {
+            display: none;
+            margin-left: 15px;
+            overflow-y: hidden;
+            -webkit-transition: all 0.4s;
+            transition: all 0.4s;
+        }
+    </style>
+</head>
+
+<body>
+<ul class="sui-list sui-border-b index-tabs">
+    <li data-target="#index-tab-1">
+        <h4>UI统一</h4>
+        <div class="index-main">
+            <ul class="sui-list sui-list-link">
+                <li data-href="base/zjcx-datePicker.html">日历插件</li>
+            </ul>
+        </div>
+    </li>
+</ul>
+
+<script src="../dist/javascripts/zepto.min.js"></script>
+<script src="../dist/javascripts/simpleui.min.js"></script>
+<script src="../dist/javascripts/vectors.js"></script>
+<script>
+    /*
+    * 兼容移动端返回不刷新
+    * */
+    window.addEventListener('pageshow', function (e) {
+        if(e.persisted) {
+            window.location.reload();
+            console.log('persisted')
+        }
+    });
+
+    $(function () {
+        init();
+
+        $('.index-tabs > li').on('click', function () {
+            var self = $(this);
+
+            var _target = self.data('target');
+            window.location.hash = _target;
+
+            self.addClass('active');
+            if(!self.data('toggle')) {
+                self.find('ul').height(self.data('height'));
+                self.data('toggle', true);
+            } else {
+                self.find('ul').height(0);
+                self.data('toggle', false);
+            }
+
+            //other
+            self.siblings().removeClass('active').data('toggle', false).find('ul').height(0);
+        });
+
+        if(getQueryString() == '') {
+            $('.index-tabs > li').eq(0).click();
+        } else {
+            $('[data-target = "' + getQueryString() + '"]').click();
+        }
+    });
+
+    //初始化
+    function init() {
+        var parent = $('.index-tabs');
+
+        parent.children('li').each(function (index, item) {
+            var self = $(item),
+                ul = self.find('ul');
+
+            var copy = ul.clone(true);
+            copy.css({
+                'display': 'block',
+                'position': 'absolute',
+                'z-index': -9999,
+                'top': '-9999px'
+            });
+
+            ul.after(copy);
+            self.data('height', copy.height());
+
+            copy.remove();
+            ul.css({
+                'display': 'block',
+                'height': 0
+            });
+        });
+    }
+
+    //获取锚点
+    function getQueryString() {
+        if(window.location.hash != '') {
+            return window.location.hash;
+        } else {
+            return '';
+        }
+    }
+</script>
+</body>
+</html>
