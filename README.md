@@ -8,5 +8,5 @@
    - example: 页面文件
 
 ## 项目运行
-npm install
+npm install  
 npm start 或者 gulp start
